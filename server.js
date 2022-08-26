@@ -19,6 +19,15 @@ app.get("/listings", (req, res) => {
   res.status(200).json(listingsData);
 });
 
+app.get("/listings/:id", (req, res) => {
+  const listingsData = readData("./data/listings.json");
+  const listingId = req.params.id;
+  const filteredListing = listingsData.find((listing) => {
+    return String(listing.id) === listingId;
+  });
+  res.status(200).json(filteredListing);
+});
+
 app.listen(port, () => {
   return console.log(`Listening on port ${port}`);
 });
