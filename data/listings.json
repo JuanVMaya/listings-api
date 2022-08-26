@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "address": "210 Victoria St",
+    "price": 595000,
+    "available": true,
+    "postalCode": "M5B2R3"
+  },
+  {
+    "id": 2,
+    "address": "210 Nanaimo St",
+    "price": 642000,
+    "available": true,
+    "postalCode": "M2H2R5"
+  }
+]
