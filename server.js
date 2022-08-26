@@ -23,9 +23,9 @@ app.get("/listings", (req, res) => {
 app.get("/listings/:id", (req, res) => {
   const listingsData = readData("./data/listings.json");
   const listingId = req.params.id;
-  const filteredListing = listingsData.find((listing) => {
-    return String(listing.id) === listingId;
-  });
+  const filteredListing = listingsData.find(
+    (listing) => String(listing.id) === listingId
+  );
   res.status(200).json(filteredListing);
 });
 
@@ -47,7 +47,27 @@ app.post("/listings", (req, res) => {
   listingsData.push(newListing);
   fs.writeFileSync("./data/listings.json", JSON.stringify(listingsData));
 
-  res.status(201).json({ id: generatedId });
+  res.status(201).json({ createdId: generatedId });
+});
+
+app.put("/listings/:id", (req, res) => {
+  const listingsData = readData("./data/listings.json");
+  const listingId = req.params.id;
+  const selectedListingItem = listingsData.find(
+    (listing) => listing.id === listingId
+  );
+  if (!selectedListingItem) {
+    res.status(404).json({ message: "Item not Found" });
+    return;
+  }
+  selectedListingItem.address = req.body.address;
+  selectedListingItem.price = req.body.price;
+  selectedListingItem.available = req.body.available;
+  selectedListingItem.postalCode = req.body.postalCode;
+
+  fs.writeFileSync("./data/listings.json", JSON.stringify(listingsData));
+
+  res.status(201).json({ updatedId: listingId });
 });
 
 app.listen(port, () => {
