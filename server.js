@@ -67,7 +67,26 @@ app.put("/listings/:id", (req, res) => {
 
   fs.writeFileSync("./data/listings.json", JSON.stringify(listingsData));
 
-  res.status(201).json({ updatedId: listingId });
+  res.status(200).json({ updatedId: listingId });
+});
+
+app.delete("/listings/:id", (req, res) => {
+  const listingsData = readData("./data/listings.json");
+  const listingId = req.params.id;
+  const selectedListingItem = listingsData.find(
+    (listing) => listing.id === listingId
+  );
+  if (!selectedListingItem) {
+    res.status(404).json({ message: "Item not Found" });
+    return;
+  }
+  const filteredListings = listingsData.filter(
+    (listing) => listingId !== listing.id
+  );
+
+  fs.writeFileSync("./data/listings.json", JSON.stringify(filteredListings));
+
+  res.status(200).json({ message:`Deleted Item ${listingId}`});
 });
 
 app.listen(port, () => {
