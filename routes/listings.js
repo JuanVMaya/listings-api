@@ -8,12 +8,52 @@ const readData = (path) => {
   const parsedData = JSON.parse(dataFile);
   return parsedData;
 };
-
+//https://store.401games.ca/collections/?sort=price_max_to_min
 router
   .route("/")
   // Fetching a list of data
   .get((req, res) => {
     const listingsData = readData("./data/listings.json");
+    /*
+        Sorting:
+        Price: High to Low
+        Price: Low to High
+        Alphanumeric: 0-Z
+        Alphanumeric: Z-0
+    */
+    if (req.query.sort === "price_max_to_min") {
+      console.log(req.query.sort);
+      listingsData.sort(
+        (listingA, listingB) => listingB.price - listingA.price
+      );
+    }
+    if (req.query.sort === "price_min_to_max") {
+      console.log(req.query.sort);
+      listingsData.sort(
+        (listingA, listingB) => listingA.price - listingB.price
+      );
+    }
+    if (req.query.sort === "0-z") {
+      console.log(req.query.sort);
+      listingsData.sort((listingA, listingB) =>
+        listingA.address > listingB.address
+          ? 1
+          : listingB.address > listingA.address
+          ? -1
+          : 0
+      );
+    }
+    if (req.query.sort === "z-9") {
+      console.log(req.query.sort);
+      listingsData.sort((listingA, listingB) =>
+        listingA.address > listingB.address
+          ? -1
+          : listingB.address > listingA.address
+          ? 1
+          : 0
+      );
+    }
+
     res.status(200).json(listingsData);
   })
   // Creating a listing item
